@@ -1,6 +1,6 @@
 {
   "name": "@apprush/react-native-editor",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A editor component for react native",
   "homepage": "https://jerloo/react-native-editor#readme",
   "main": "lib/index.js",
@@ -74,5 +74,8 @@
     "react-native-keyboard-aware-view": "^0.0.14",
     "react-native-lightbox": "^0.8.1",
     "shortid": "^2.2.16"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
