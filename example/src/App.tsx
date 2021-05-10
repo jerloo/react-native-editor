@@ -1,16 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, SafeAreaView } from 'react-native'
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
-import {
-  Container,
-  Header,
-  Body,
-  Title,
-  Right,
-  Left,
-  Button,
-  Icon,
-} from 'native-base'
+import { Container, Body, Title, Button, Icon } from 'native-base'
 
 import {
   TextEditor,
@@ -18,7 +9,7 @@ import {
   getEmitter,
   EVENTS,
   contentState,
-} from 'react-native-editor'
+} from '@apprush/react-native-editor'
 
 const eventEmitter = getEmitter()
 
