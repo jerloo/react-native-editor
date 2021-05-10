@@ -11,6 +11,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ant-design/react-native": "^4.1.0",
+    "@react-native-community/async-storage": "^1.12.1",
     "lodash": "^4.17.21",
     "native-base": "^2.15.2",
     "react": "^17.0.2",

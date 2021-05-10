@@ -34,7 +34,12 @@
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "@babel/runtime": "^7.13.10",
+    "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/cameraroll": "^4.0.4",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@react-native-community/segmented-control": "^2.2.2",
+    "@react-native-community/slider": "^3.0.3",
+    "@react-native-picker/picker": "^1.15.0",
     "@types/fbemitter": "^2.0.32",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",
@@ -47,13 +52,21 @@
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.65.2",
     "react": "^17.0.2",
+    "react-native": "^0.64.1",
+    "react-native-pager-view": "^5.1.7",
     "react-native-permissions": "^3.0.3",
     "react-native-vector-icons": "^8.1.0",
     "react-test-renderer": "^17.0.2",
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
+    "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/cameraroll": "^4.0.4",
+    "@react-native-community/segmented-control": "^2.2.2",
+    "@react-native-community/slider": "^3.0.3",
+    "@react-native-picker/picker": "^1.15.0",
     "react": "*",
+    "react-native-pager-view": "^5.1.7",
     "react-native-vector-icons": "*"
   },
   "jest": {
@@ -68,6 +81,7 @@
     ]
   },
   "dependencies": {
+    "@ant-design/react-native": "^4.1.0",
     "fbemitter": "^3.0.0",
     "lodash": "^4.17.21",
     "react-native-image-picker": "^3.6.0",

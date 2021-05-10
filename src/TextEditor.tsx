@@ -1,3 +1,4 @@
+import { ActionSheet } from '@ant-design/react-native'
 import _ from 'lodash'
 import * as React from 'react'
 import {
@@ -421,53 +422,53 @@ class Editor extends React.Component<Props, State> {
     var CANCEL_INDEX = Object.values(BUTTONS).length - 1
     var DESTRUCTIVE_INDEX = Object.keys(BUTTONS).indexOf(activeRow.type)
 
-    // ActionSheet.show(
-    //   {
-    //     options: Object.values(BUTTONS),
-    //     cancelButtonIndex: CANCEL_INDEX,
-    //     destructiveButtonIndex: DESTRUCTIVE_INDEX,
-    //     title: 'Change Block Type',
-    //   },
-    //   (i) => {
-    //     const keys = Object.keys(BUTTONS)
-    //     if (keys[i] === 'text') {
-    //       this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.TEXT })
-    //     }
-    //     if (keys[i] === ROW_TYPES.HEADING1) {
-    //       this.changeRowType({
-    //         index: activeRowIndex,
-    //         type: ROW_TYPES.HEADING1,
-    //       })
-    //     }
-    //     if (keys[i] === ROW_TYPES.HEADING2) {
-    //       this.changeRowType({
-    //         index: activeRowIndex,
-    //         type: ROW_TYPES.HEADING2,
-    //       })
-    //     }
-    //     if (keys[i] === ROW_TYPES.HEADING3) {
-    //       this.changeRowType({
-    //         index: activeRowIndex,
-    //         type: ROW_TYPES.HEADING3,
-    //       })
-    //     }
-    //     if (keys[i] === 'blockquote') {
-    //       this.changeRowType({
-    //         index: activeRowIndex,
-    //         type: ROW_TYPES.BLOCKQUOTE,
-    //       })
-    //     }
-    //     if (keys[i] === 'bullets') {
-    //       this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.BULLETS })
-    //     }
-    //     if (keys[i] === ROW_TYPES.NUMBERS) {
-    //       this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.NUMBERS })
-    //     }
-    //     if (keys[i] === ROW_TYPES.TODOS) {
-    //       this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.TODOS })
-    //     }
-    //   }
-    // )
+    ActionSheet.showActionSheetWithOptions(
+      {
+        options: Object.values(BUTTONS),
+        cancelButtonIndex: CANCEL_INDEX,
+        destructiveButtonIndex: DESTRUCTIVE_INDEX,
+        title: 'Change Block Type',
+      },
+      (i) => {
+        const keys = Object.keys(BUTTONS)
+        if (keys[i] === 'text') {
+          this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.TEXT })
+        }
+        if (keys[i] === ROW_TYPES.HEADING1) {
+          this.changeRowType({
+            index: activeRowIndex,
+            type: ROW_TYPES.HEADING1,
+          })
+        }
+        if (keys[i] === ROW_TYPES.HEADING2) {
+          this.changeRowType({
+            index: activeRowIndex,
+            type: ROW_TYPES.HEADING2,
+          })
+        }
+        if (keys[i] === ROW_TYPES.HEADING3) {
+          this.changeRowType({
+            index: activeRowIndex,
+            type: ROW_TYPES.HEADING3,
+          })
+        }
+        if (keys[i] === 'blockquote') {
+          this.changeRowType({
+            index: activeRowIndex,
+            type: ROW_TYPES.BLOCKQUOTE,
+          })
+        }
+        if (keys[i] === 'bullets') {
+          this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.BULLETS })
+        }
+        if (keys[i] === ROW_TYPES.NUMBERS) {
+          this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.NUMBERS })
+        }
+        if (keys[i] === ROW_TYPES.TODOS) {
+          this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.TODOS })
+        }
+      }
+    )
   }
 
   // TODO: done
@@ -488,55 +489,55 @@ class Editor extends React.Component<Props, State> {
     var CANCEL_INDEX = Object.values(BUTTONS).length - 1
     var DESTRUCTIVE_INDEX = -1
 
-    // ActionSheet.show(
-    //   {
-    //     options: Object.values(BUTTONS),
-    //     cancelButtonIndex: CANCEL_INDEX,
-    //     destructiveButtonIndex: DESTRUCTIVE_INDEX,
-    //     title: 'Insert Block',
-    //   },
-    //   (i) => {
-    //     const keys = Object.keys(BUTTONS)
-    //     if (keys[i] === ROW_TYPES.TEXT) {
-    //       this.insertRow({ focus: true })
-    //     }
-    //     if (keys[i] === ROW_TYPES.HEADING1) {
-    //       this.insertHeading({ heading: ROW_TYPES.HEADING1 })
-    //     }
-    //     if (keys[i] === ROW_TYPES.HEADING2) {
-    //       this.insertHeading({ heading: ROW_TYPES.HEADING2 })
-    //     }
-    //     if (keys[i] === ROW_TYPES.HEADING3) {
-    //       this.insertHeading({ heading: ROW_TYPES.HEADING3 })
-    //     }
-    //     if (keys[i] === ROW_TYPES.HR) {
-    //       this.insertRow({
-    //         type: ROW_TYPES.HR,
-    //         focus: false,
-    //         insertAfterActive: true,
-    //       })
-    //     }
-    //     if (keys[i] === ROW_TYPES.BLOCKQUOTE) {
-    //       this.insertRow({
-    //         type: ROW_TYPES.BLOCKQUOTE,
-    //         focus: true,
-    //         insertAfterActive: true,
-    //       })
-    //     }
-    //     if (keys[i] === ROW_TYPES.BULLETS) {
-    //       this.insertList({ list: 'bullets' })
-    //     }
-    //     if (keys[i] === ROW_TYPES.NUMBERS) {
-    //       this.insertList({ list: 'numbers' })
-    //     }
-    //     if (keys[i] === ROW_TYPES.TODOS) {
-    //       this.insertList({ list: 'todos' })
-    //     }
-    //     if (keys[i] === 'Sketch') {
-    //       this.showSketchModal()
-    //     }
-    //   }
-    // )
+    ActionSheet.showActionSheetWithOptions(
+      {
+        options: Object.values(BUTTONS),
+        cancelButtonIndex: CANCEL_INDEX,
+        destructiveButtonIndex: DESTRUCTIVE_INDEX,
+        title: 'Insert Block',
+      },
+      (i) => {
+        const keys = Object.keys(BUTTONS)
+        if (keys[i] === ROW_TYPES.TEXT) {
+          this.insertRow({ focus: true })
+        }
+        if (keys[i] === ROW_TYPES.HEADING1) {
+          this.insertHeading({ heading: ROW_TYPES.HEADING1 })
+        }
+        if (keys[i] === ROW_TYPES.HEADING2) {
+          this.insertHeading({ heading: ROW_TYPES.HEADING2 })
+        }
+        if (keys[i] === ROW_TYPES.HEADING3) {
+          this.insertHeading({ heading: ROW_TYPES.HEADING3 })
+        }
+        if (keys[i] === ROW_TYPES.HR) {
+          this.insertRow({
+            type: ROW_TYPES.HR,
+            focus: false,
+            insertAfterActive: true,
+          })
+        }
+        if (keys[i] === ROW_TYPES.BLOCKQUOTE) {
+          this.insertRow({
+            type: ROW_TYPES.BLOCKQUOTE,
+            focus: true,
+            insertAfterActive: true,
+          })
+        }
+        if (keys[i] === ROW_TYPES.BULLETS) {
+          this.insertList({ list: 'bullets' })
+        }
+        if (keys[i] === ROW_TYPES.NUMBERS) {
+          this.insertList({ list: 'numbers' })
+        }
+        if (keys[i] === ROW_TYPES.TODOS) {
+          this.insertList({ list: 'todos' })
+        }
+        if (keys[i] === 'Sketch') {
+          this.showSketchModal()
+        }
+      }
+    )
   }
 
   // FIXME: done
@@ -549,23 +550,23 @@ class Editor extends React.Component<Props, State> {
     var CANCEL_INDEX = Object.values(BUTTONS).length - 1
     var DESTRUCTIVE_INDEX = -1
 
-    // ActionSheet.show(
-    //   {
-    //     options: Object.values(BUTTONS),
-    //     cancelButtonIndex: CANCEL_INDEX,
-    //     destructiveButtonIndex: DESTRUCTIVE_INDEX,
-    //     title: 'Insert Image',
-    //   },
-    //   (i) => {
-    //     const keys = Object.keys(BUTTONS)
-    //     if (keys[i] === 'Take Photo') {
-    //       this.insertImage({ type: 'Take Photo' })
-    //     }
-    //     if (keys[i] === 'Browse Photo') {
-    //       this.insertImage({ type: 'Browse Photo' })
-    //     }
-    //   }
-    // )
+    ActionSheet.showActionSheetWithOptions(
+      {
+        options: Object.values(BUTTONS),
+        cancelButtonIndex: CANCEL_INDEX,
+        destructiveButtonIndex: DESTRUCTIVE_INDEX,
+        title: 'Insert Image',
+      },
+      (i) => {
+        const keys = Object.keys(BUTTONS)
+        if (keys[i] === 'Take Photo') {
+          this.insertImage({ type: 'Take Photo' })
+        }
+        if (keys[i] === 'Browse Photo') {
+          this.insertImage({ type: 'Browse Photo' })
+        }
+      }
+    )
   }
 
   // FIXME: Done
@@ -1234,20 +1235,20 @@ class Editor extends React.Component<Props, State> {
   // FIXME:
   handleImage = ({ _row, index }: any) => () => {
     // const { activeRowIndex, rows = [] } = this.state
-    // ActionSheet.show(
-    //   {
-    //     options: ['Delete', 'Cancel'],
-    //     cancelButtonIndex: 1,
-    //     destructiveButtonIndex: 0,
-    //     title: 'Delete Image',
-    //   },
-    //   (i) => {
-    //     if (i === 0) {
-    //       // this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.TEXT })
-    //       this.removeRow({ index, focusPrev: true })
-    //     }
-    //   }
-    // )
+    ActionSheet.showActionSheetWithOptions(
+      {
+        options: ['Delete', 'Cancel'],
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+        title: 'Delete Image',
+      },
+      (i) => {
+        if (i === 0) {
+          // this.changeRowType({ index: activeRowIndex, type: ROW_TYPES.TEXT })
+          this.removeRow({ index, focusPrev: true })
+        }
+      }
+    )
   }
   // FIXME:
   toggleTodo = ({ row, index }: any) => () => {

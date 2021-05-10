@@ -192,7 +192,7 @@ class Toolbar extends React.Component<{}, State> {
         <Button icon='close' onPress={this.setDefaultView} />
         <Divider />
         <Button
-          icon='keyboard-hide'
+          icon='keyboard-close'
           onPress={this.emit(EVENTS.HIDE_KEYBOARD)}
         />
       </React.Fragment>
@@ -235,7 +235,7 @@ class Toolbar extends React.Component<{}, State> {
         <Button icon='close' onPress={this.setDefaultView} />
         <Divider />
         <Button
-          icon='keyboard-hide'
+          icon='keyboard-close'
           onPress={this.emit(EVENTS.HIDE_KEYBOARD)}
         />
       </React.Fragment>
