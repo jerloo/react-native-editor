@@ -11,8 +11,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
+    "native-base": "^2.15.2",
     "react": "^17.0.2",
-    "react-native": "^0.64.0"
+    "react-native": "^0.64.0",
+    "react-native-keyboard-aware-view": "^0.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",

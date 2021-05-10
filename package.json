@@ -1,17 +1,17 @@
 {
-  "name": "react-native-module-template",
-  "version": "2.2.0",
-  "description": "A starter for the React Native library written in TypeScript, with linked example project and optional native code in Swift and Kotlin.",
-  "homepage": "https://github.com/demchenkoalex/react-native-module-template#readme",
+  "name": "react-native-editor",
+  "version": "1.0.0",
+  "description": "A editor component for react native",
+  "homepage": "https://jerloo/react-native-editor#readme",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "author": "Alex Demchenko <alexdemchenko@yahoo.com>",
+  "author": "jerloo <jeremaihloo1024@gmail.com>",
   "license": "MIT",
   "files": [
     "android",
     "ios",
     "lib",
-    "react-native-module-template.podspec",
+    "react-native-editor.podspec",
     "!.DS_Store",
     "!.gradle",
     "!.idea",
@@ -35,9 +35,12 @@
     "@babel/core": "^7.13.14",
     "@babel/runtime": "^7.13.10",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@types/fbemitter": "^2.0.32",
     "@types/jest": "^26.0.22",
+    "@types/lodash": "^4.14.168",
     "@types/react-native": "^0.64.2",
     "@types/react-test-renderer": "^17.0.1",
+    "@types/shortid": "^0.0.29",
     "babel-jest": "^26.6.3",
     "eslint": "^7.23.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
@@ -62,5 +65,16 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "expo": "^41.0.1",
+    "expo-image-picker": "~10.1.4",
+    "expo-permissions": "~12.0.1",
+    "fbemitter": "^3.0.0",
+    "lodash": "^4.17.21",
+    "native-base": "^2.15.2",
+    "react-native-keyboard-aware-view": "^0.0.14",
+    "react-native-lightbox": "^0.8.1",
+    "shortid": "^2.2.16"
   }
 }
