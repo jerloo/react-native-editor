@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, SafeAreaView } from 'react-native'
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
 import {
   Container,
@@ -10,7 +10,6 @@ import {
   Left,
   Button,
   Icon,
-  Text,
 } from 'native-base'
 
 import {
@@ -23,7 +22,7 @@ import {
 
 const eventEmitter = getEmitter()
 
-let editor = null
+let editor: any = null
 
 export default class App extends React.Component {
   state = {
@@ -62,24 +61,24 @@ export default class App extends React.Component {
     eventEmitter.emit(EVENTS.CONVERT_TO_RAW)
   }
 
-  onChange = (data) => {
-    // console.log(data)
+  onChange = (data: any) => {
+    console.log(data)
     this.setState({ extraData: Date.now() })
   }
 
   render() {
     return (
-      <Container>
-        <Header>
-          <Left>
-            <Button transparent onPress={this.convert}>
-              <Icon name='save' />
-            </Button>
-          </Left>
+      <SafeAreaView
+        style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+      >
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <Button transparent onPress={this.convert}>
+            <Icon name='save' />
+          </Button>
           <Body>
             <Title>Text Editor</Title>
           </Body>
-          <Right>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
             <Button transparent onPress={this.reload}>
               <Icon name='md-refresh' />
             </Button>
@@ -92,8 +91,8 @@ export default class App extends React.Component {
             <Button transparent onPress={this.logState}>
               <Icon name='list' />
             </Button>
-          </Right>
-        </Header>
+          </View>
+        </View>
         <SafeAreaView style={{ flex: 1 }}>
           <Container>
             <KeyboardAwareView keyboardShouldPersistTaps animated>
@@ -111,7 +110,7 @@ export default class App extends React.Component {
             </KeyboardAwareView>
           </Container>
         </SafeAreaView>
-      </Container>
+      </SafeAreaView>
     )
   }
 }

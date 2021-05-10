@@ -1,4 +1,3 @@
-import { Icon } from 'native-base'
 import * as React from 'react'
 import {
   InteractionManager,
@@ -8,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { COLORS } from './Constants'
 import getEmitter from './EventEmitter'
@@ -48,11 +48,9 @@ const Button: React.FC<{
       disabled={isDisabled}
       onPress={onPress}
     >
-      {hasIcon && <Icon name={icon as any} color='black' fontSize={20} />}
+      {hasIcon && <Icon name={icon as any} color='black' size={20} />}
       {hasName && <Text style={[textStyles]}>{name}</Text>}
-      {arrow && (
-        <Icon name={'keyboard-arrow-down'} color='#e3e3e3' fontSize={16} />
-      )}
+      {arrow && <Icon name={'chevron-down'} color='#e3e3e3' size={16} />}
     </TouchableOpacity>
   )
 }
@@ -181,7 +179,7 @@ class Toolbar extends React.Component<{}, State> {
                 >
                   {isActive && (
                     <View style={styles.checkboxContainer}>
-                      <Icon name='check' fontSize={24} color='white' />
+                      <Icon name='check' size={24} color='white' />
                     </View>
                   )}
                 </TouchableOpacity>
@@ -272,7 +270,7 @@ class Toolbar extends React.Component<{}, State> {
           contentContainerStyle={styles.contentContainerStyle}
         >
           <Button
-            icon='add-circle-outline'
+            icon='plus-circle-outline'
             onPress={this.emit(EVENTS.SHOW_INSERT_BLOCK)}
           />
           <Divider />
@@ -284,10 +282,7 @@ class Toolbar extends React.Component<{}, State> {
           />
           <Divider />
 
-          <Button
-            icon='insert-photo'
-            onPress={this.emit(EVENTS.SHOW_UPLOAD_FILE)}
-          />
+          <Button icon='image' onPress={this.emit(EVENTS.SHOW_UPLOAD_FILE)} />
           <Divider />
 
           <Button
@@ -303,13 +298,13 @@ class Toolbar extends React.Component<{}, State> {
             onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'italic' })}
           />
           <Button
-            icon='format-underlined'
+            icon='format-underline'
             isActive={isActiveUnderline}
             isDisabled={isDisabledUnderline}
             onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'underline' })}
           />
           <Button
-            icon='strikethrough-s'
+            icon='format-strikethrough-variant'
             isActive={isActiveStrikeThrough}
             isDisabled={isDisabledStrikeThrough}
             onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'strikethrough' })}
@@ -330,7 +325,7 @@ class Toolbar extends React.Component<{}, State> {
           <Divider />
 
           <Button
-            icon='code'
+            icon='code-json'
             name='Code'
             isActive={isActiveCode}
             isDisabled={isDisabledCode}
@@ -361,11 +356,11 @@ class Toolbar extends React.Component<{}, State> {
           <Divider />
 
           <Button
-            icon='vertical-align-top'
+            icon='format-vertical-align-top'
             onPress={this.emit(EVENTS.CHANGE_BLOCK_INDEX, { direction: 'up' })}
           />
           <Button
-            icon='vertical-align-bottom'
+            icon='format-vertical-align-bottom'
             onPress={this.emit(EVENTS.CHANGE_BLOCK_INDEX, {
               direction: 'down',
             })}
@@ -408,7 +403,7 @@ class Toolbar extends React.Component<{}, State> {
         />
         <Divider />
         <Button
-          icon='keyboard-hide'
+          icon='keyboard-close'
           onPress={this.emit(EVENTS.HIDE_KEYBOARD)}
         />
       </React.Fragment>
