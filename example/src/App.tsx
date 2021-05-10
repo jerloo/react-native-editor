@@ -1,15 +1,14 @@
-import React from 'react'
-import { StyleSheet, View, SafeAreaView } from 'react-native'
-import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
-import { Container, Body, Title, Button, Icon } from 'native-base'
-
 import {
+  contentState,
+  EVENTS,
+  getEmitter,
   TextEditor,
   TextToolbar,
-  getEmitter,
-  EVENTS,
-  contentState,
 } from '@apprush/react-native-editor'
+import { Body, Button, Container, Icon, Title } from 'native-base'
+import React from 'react'
+import { LogBox, SafeAreaView, StyleSheet, View } from 'react-native'
+import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
 
 const eventEmitter = getEmitter()
 
@@ -18,6 +17,10 @@ let editor: any = null
 export default class App extends React.Component {
   state = {
     extraData: Date.now(),
+  }
+
+  componentDidMount() {
+    LogBox.ignoreLogs(['Animated: `useNativeDriver`'])
   }
 
   logState() {
