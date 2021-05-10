@@ -5,7 +5,28 @@ import { ROW_TYPES, STYLE_TYPES } from './Constants'
 
 export const generateId = () => shortid()
 
-export const contentState = {
+export interface ContentInlineStyle {
+  offset: number
+  length: number
+  style: string
+}
+
+export interface ContentBlock {
+  key: string
+  text: string
+  type: string
+  depth: number
+  inlineStyleRanges: ContentInlineStyle[]
+  entityRanges: any[]
+  data: any
+}
+
+export interface ContentState {
+  blocks: ContentBlock[]
+  entityMap: any
+}
+
+export const contentState: ContentState = {
   blocks: [
     {
       key: '1la1e',
