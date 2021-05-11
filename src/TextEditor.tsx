@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import * as ImagePicker from 'react-native-image-picker'
+console.log('ImagePicker', ImagePicker)
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
 import Lightbox from 'react-native-lightbox'
 import { check, PERMISSIONS } from 'react-native-permissions'
@@ -584,7 +585,7 @@ class Editor extends React.Component<Props, State> {
     }
 
     if (type === 'Take Photo') {
-      launchCamera({ mediaType: 'photo' }, (result) => {
+      ImagePicker.launchCamera({ mediaType: 'photo' }, (result) => {
         console.log(result)
 
         if (!result.didCancel) {
@@ -597,7 +598,7 @@ class Editor extends React.Component<Props, State> {
         }
       })
     } else {
-      launchImageLibrary({ mediaType: 'photo' }, (result) => {
+      ImagePicker.launchImageLibrary({ mediaType: 'photo' }, (result) => {
         console.log(result)
 
         if (!result.didCancel) {

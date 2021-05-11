@@ -2,7 +2,7 @@
   "name": "@apprush/react-native-editor",
   "version": "0.0.1",
   "description": "A editor component for react native",
-  "homepage": "https://jerloo/react-native-editor#readme",
+  "homepage": "https://github.com/jerloo/react-native-editor#readme",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "jerloo <jeremaihloo1024@gmail.com>",
@@ -67,7 +67,8 @@
     "@react-native-picker/picker": "^1.15.0",
     "react": "*",
     "react-native-pager-view": "^5.1.7",
-    "react-native-vector-icons": "*"
+    "react-native-vector-icons": "*",
+    "react-native-image-picker": "^3.6.0"
   },
   "jest": {
     "preset": "react-native",

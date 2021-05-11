@@ -17,6 +17,7 @@
     "native-base": "^2.15.2",
     "react": "^17.0.2",
     "react-native": "^0.64.0",
+    "react-native-image-picker": "^3.6.0",
     "react-native-keyboard-aware-view": "^0.0.14",
     "react-native-permissions": "^3.0.3",
     "react-native-vector-icons": "^8.1.0"
