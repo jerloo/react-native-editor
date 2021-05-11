@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const CheckBox = ({ style = {}, isChecked = false, toggle = () => {} }) => {
-  const icon = isChecked ? 'check-box' : 'check-box-outline-blank'
+  const icon = isChecked ? 'checkbox-marked-outline' : 'checkbox-blank-outline'
   return (
     <TouchableOpacity style={[style]} onPress={toggle}>
       <Icon name={icon} size={20} />
