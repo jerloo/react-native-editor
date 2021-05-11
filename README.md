@@ -11,6 +11,8 @@
 
 A responsive solution for iphone6 ui design.
 
+<img src="./screenshots/main.jpeg" alt="drawing" width="200"/>
+
 ### Installation
 
 ```bash
