@@ -10,13 +10,12 @@ import React, { useState } from 'react'
 import { useRef } from 'react'
 import { LogBox, SafeAreaView, StyleSheet, View } from 'react-native'
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
-import Editor from '../../src/TextEditor'
 LogBox.ignoreLogs(['Animated: `useNativeDriver`'])
 
 const eventEmitter = getEmitter()
 
 const App = () => {
-  const editor = useRef<Editor | null>(null)
+  const editor = useRef<TextEditor | null>(null)
   const [extraData, setExtraData] = useState(Date.now())
   const logState = () => {
     eventEmitter.emit(EVENTS.LOG_STATE)
