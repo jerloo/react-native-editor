@@ -6,107 +6,95 @@ import {
   TextToolbar,
 } from '@apprush/react-native-editor'
 import { Body, Button, Container, Icon, Title } from 'native-base'
-import React from 'react'
+import React, { useState } from 'react'
+import { useRef } from 'react'
 import { LogBox, SafeAreaView, StyleSheet, View } from 'react-native'
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
+import Editor from '../../src/TextEditor'
+LogBox.ignoreLogs(['Animated: `useNativeDriver`'])
 
 const eventEmitter = getEmitter()
 
-let editor: any = null
-
-export default class App extends React.Component {
-  state = {
-    extraData: Date.now(),
-  }
-
-  componentDidMount() {
-    LogBox.ignoreLogs(['Animated: `useNativeDriver`'])
-  }
-
-  logState() {
+const App = () => {
+  const editor = useRef<Editor | null>(null)
+  const [extraData, setExtraData] = useState(Date.now())
+  const logState = () => {
     eventEmitter.emit(EVENTS.LOG_STATE)
   }
 
-  reload() {
+  const reload = () => {
     if (editor) {
-      editor.reload()
+      editor.current?.reload()
     } else {
       console.log('reload')
     }
   }
 
-  refresh() {
+  const refresh = () => {
     if (editor) {
-      editor.refresh()
+      editor.current?.refresh()
     } else {
       console.log('refresh')
     }
   }
 
-  clear() {
+  const clear = () => {
     if (editor) {
-      editor.clear()
+      editor.current?.clear()
     } else {
       console.log('clear')
     }
   }
 
-  convert() {
+  const convert = () => {
     eventEmitter.emit(EVENTS.CONVERT_TO_RAW)
   }
 
-  onChange = (data: any) => {
+  const onChange = (data: any) => {
     console.log(data)
-    this.setState({ extraData: Date.now() })
+    setExtraData(Date.now())
   }
-
-  render() {
-    return (
-      <SafeAreaView
-        style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-      >
+  return (
+    <SafeAreaView style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <View style={{ display: 'flex', flexDirection: 'row' }}>
+        <Button transparent onPress={convert}>
+          <Icon name='save' />
+        </Button>
+        <Body>
+          <Title>Text Editor</Title>
+        </Body>
         <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <Button transparent onPress={this.convert}>
-            <Icon name='save' />
+          <Button transparent onPress={reload}>
+            <Icon name='md-refresh' />
           </Button>
-          <Body>
-            <Title>Text Editor</Title>
-          </Body>
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <Button transparent onPress={this.reload}>
-              <Icon name='md-refresh' />
-            </Button>
-            <Button transparent onPress={this.refresh}>
-              <Icon name='refresh' />
-            </Button>
-            <Button transparent onPress={this.clear}>
-              <Icon name='trash' />
-            </Button>
-            <Button transparent onPress={this.logState}>
-              <Icon name='list' />
-            </Button>
-          </View>
+          <Button transparent onPress={refresh}>
+            <Icon name='refresh' />
+          </Button>
+          <Button transparent onPress={clear}>
+            <Icon name='trash' />
+          </Button>
+          <Button transparent onPress={logState}>
+            <Icon name='list' />
+          </Button>
         </View>
-        <SafeAreaView style={{ flex: 1 }}>
-          <Container>
-            <KeyboardAwareView keyboardShouldPersistTaps animated>
-              <View style={styles.editor}>
-                <TextEditor
-                  ref={(e) => {
-                    editor = e
-                  }}
-                  data={contentState}
-                  onChange={this.onChange}
-                  extraData={this.state.extraData}
-                />
-              </View>
-              <TextToolbar />
-            </KeyboardAwareView>
-          </Container>
-        </SafeAreaView>
+      </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Container>
+          <KeyboardAwareView keyboardShouldPersistTaps animated>
+            <View style={styles.editor}>
+              <TextEditor
+                ref={editor}
+                data={contentState}
+                onChange={onChange}
+                extraData={extraData}
+              />
+            </View>
+            <TextToolbar />
+          </KeyboardAwareView>
+        </Container>
       </SafeAreaView>
-    )
-  }
+    </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -125,3 +113,5 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red'
   },
 })
+
+export default App
