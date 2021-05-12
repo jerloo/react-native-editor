@@ -63,6 +63,7 @@ interface Props {
   onFocus?: (e: any) => void
   onChange?: (e: any) => void
   extraData: number
+  imageHandler?: (image: string) => Promise<string>
 }
 
 interface State {
@@ -600,17 +601,25 @@ class Editor extends React.Component<Props, State> {
       return
     }
 
+    const handler =
+      this.props.imageHandler ||
+      (async (image) => {
+        return image
+      })
+
     if (type === 'Take Photo') {
       ImagePicker.launchCamera({ mediaType: 'photo' }, (result) => {
         console.log(result)
 
         if (!result.didCancel) {
-          let newRowData = {
-            id: generateId(),
-            type: ROW_TYPES.IMAGE,
-            image: result.uri,
-          }
-          this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          handler(result.uri!).then((handledUri) => {
+            let newRowData = {
+              id: generateId(),
+              type: ROW_TYPES.IMAGE,
+              image: handledUri,
+            }
+            this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          })
         }
       })
     } else {
@@ -618,12 +627,14 @@ class Editor extends React.Component<Props, State> {
         console.log(result)
 
         if (!result.didCancel) {
-          let newRowData = {
-            id: generateId(),
-            type: ROW_TYPES.IMAGE,
-            image: result.uri,
-          }
-          this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          handler(result.uri!).then((handledUri) => {
+            let newRowData = {
+              id: generateId(),
+              type: ROW_TYPES.IMAGE,
+              image: handledUri,
+            }
+            this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          })
         }
       })
     }
@@ -1273,6 +1284,7 @@ class Editor extends React.Component<Props, State> {
   }
   // FIXME:
   handleImage = ({ _row, index }: any) => () => {
+    console.log('handleImage')
     // const { activeRowIndex, rows = [] } = this.state
     ActionSheet.showActionSheetWithOptions(
       {
