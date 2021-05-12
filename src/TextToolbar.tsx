@@ -70,8 +70,36 @@ interface State {
   activeView: string
 }
 
-class Toolbar extends React.Component<{}, State> {
-  constructor(props: {}) {
+type Feature =
+  | 'add'
+  | 'turn into'
+  | 'image'
+  | 'format-bold'
+  | 'format-italic'
+  | 'format-underline'
+  | 'format-strikethrough-variant'
+  | 'format-align-center'
+  | 'format-color-fill'
+  | 'format-color-text'
+  | 'format-clear'
+  | 'code'
+  | 'duplicate'
+  | 'format-indent-increase'
+  | 'format-indent-decrease'
+  | 'format-vertical-align-top'
+  | 'format-vertical-align-bottom'
+  | 'undo'
+  | 'redo'
+  | 'delete'
+  | 'fullscreen'
+  | 'keyboard-close'
+
+interface Props {
+  features?: Feature[]
+}
+
+class Toolbar extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props)
     this.state = {
       activeStyles: [],
@@ -242,6 +270,12 @@ class Toolbar extends React.Component<{}, State> {
     )
   }
 
+  renderIfFeature = (feature: Feature, ...children: React.ReactNode[]) => {
+    return this.props.features?.find((it) => it === feature) ? (
+      <>{children}</>
+    ) : null
+  }
+
   renderDefault = () => {
     const { activeStyles, activeRowType } = this.state
 
@@ -269,21 +303,33 @@ class Toolbar extends React.Component<{}, State> {
           keyboardDismissMode='none'
           contentContainerStyle={styles.contentContainerStyle}
         >
-          <Button
-            icon='plus-circle-outline'
-            onPress={this.emit(EVENTS.SHOW_INSERT_BLOCK)}
-          />
-          <Divider />
+          {this.renderIfFeature(
+            'add',
+            <Button
+              icon='plus-circle-outline'
+              onPress={this.emit(EVENTS.SHOW_INSERT_BLOCK)}
+            />,
+            <Divider />
+          )}
 
-          <Button
-            name='Turn Into'
-            arrow
-            onPress={this.emit(EVENTS.CHANGE_BLOCK_TYPE)}
-          />
-          <Divider />
+          {this.renderIfFeature(
+            'turn into',
+            <Button
+              name='Turn Into'
+              arrow
+              onPress={this.emit(EVENTS.CHANGE_BLOCK_TYPE)}
+            />,
+            <Divider />
+          )}
 
-          <Button icon='image' onPress={this.emit(EVENTS.SHOW_UPLOAD_FILE)} />
-          <Divider />
+          {this.renderIfFeature(
+            'image',
+            <Button
+              icon='image'
+              onPress={this.emit(EVENTS.SHOW_UPLOAD_FILE)}
+            />,
+            <Divider />
+          )}
 
           <Button
             icon='format-bold'
