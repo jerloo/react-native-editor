@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const CheckBox = ({ style = {}, isChecked = false, toggle = () => {} }) => {
@@ -11,10 +11,10 @@ const CheckBox = ({ style = {}, isChecked = false, toggle = () => {} }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  default: {
-    // backgroundColor: 'red',
-  },
-})
+// const styles = StyleSheet.create({
+//   default: {
+//     // backgroundColor: 'red',
+//   },
+// })
 
 export default CheckBox

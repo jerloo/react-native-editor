@@ -48,7 +48,7 @@ const Button: React.FC<{
       disabled={isDisabled}
       onPress={onPress}
     >
-      {hasIcon && <Icon name={icon as any} color='black' size={20} />}
+      {hasIcon && icon && <Icon name={icon} color='black' size={20} />}
       {hasName && <Text style={[textStyles]}>{name}</Text>}
       {arrow && <Icon name={'chevron-down'} color='#e3e3e3' size={16} />}
     </TouchableOpacity>
@@ -102,11 +102,11 @@ class Toolbar extends React.Component<{}, State> {
     }
   }
 
-  activeStylesChanged = ({ activeStyles }: any) => {
+  activeStylesChanged = ({ activeStyles }: { activeStyles: string[] }) => {
     this.setState({ activeStyles })
   }
 
-  rowTypeChanged = ({ type }: any) => {
+  rowTypeChanged = ({ type }: { type: string }) => {
     this.setState({ activeRowType: type })
   }
 

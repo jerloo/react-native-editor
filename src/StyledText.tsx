@@ -9,10 +9,10 @@ const StyledText = ({
   type = ROW_TYPES.TEXT,
   isCompleted = false,
 }: {
-  text: string
-  textStyles: string[]
-  type: string
-  isCompleted: boolean
+  text?: string
+  textStyles?: string[]
+  type?: string
+  isCompleted?: boolean
 }) => {
   let inputStyles = [styles.default]
 
