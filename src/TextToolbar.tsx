@@ -210,7 +210,7 @@ class Toolbar extends React.Component<Props, State> {
       <React.Fragment>
         <Divider />
         <Button
-          icon='format-color-reset'
+          icon='water-off'
           onPress={this.selectColor({ color: 'default' })}
         />
 
