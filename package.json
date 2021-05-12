@@ -43,6 +43,7 @@
     "@types/fbemitter": "^2.0.32",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",
+    "@types/react-draft-wysiwyg": "^1.13.2",
     "@types/react-native-vector-icons": "^6.4.6",
     "@types/react-test-renderer": "^17.0.1",
     "@types/shortid": "^0.0.29",
@@ -65,10 +66,12 @@
     "@react-native-community/segmented-control": "^2.2.2",
     "@react-native-community/slider": "^3.0.3",
     "@react-native-picker/picker": "^1.15.0",
+    "expo-image-picker": "^10.1.4",
+    "expo-media-library": "^12.0.2",
     "react": "*",
+    "react-native-image-picker": "^3.6.0",
     "react-native-pager-view": "^5.1.7",
-    "react-native-vector-icons": "*",
-    "react-native-image-picker": "^3.6.0"
+    "react-native-vector-icons": "*"
   },
   "jest": {
     "preset": "react-native",

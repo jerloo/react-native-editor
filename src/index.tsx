@@ -1,7 +1,19 @@
 import getEmitter from './EventEmitter'
 import EVENTS from './Events'
-import { contentState } from './Helpers'
+import {
+  contentState,
+  createContentStateFromText,
+  createEmptyContentState,
+} from './Helpers'
 import TextEditor from './TextEditor'
 import TextToolbar from './TextToolbar'
 
-export { contentState, EVENTS, getEmitter, TextEditor, TextToolbar }
+export {
+  contentState,
+  createContentStateFromText,
+  createEmptyContentState,
+  EVENTS,
+  getEmitter,
+  TextEditor,
+  TextToolbar,
+}

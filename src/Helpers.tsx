@@ -274,6 +274,28 @@ export const contentState: ContentState = {
   entityMap: {},
 }
 
+export const createContentStateFromText = (
+  text: string,
+  delimiter?: string
+): ContentState => {
+  const lines = text.split(delimiter || '\n')
+  return {
+    blocks: lines.map((line) => {
+      return {
+        text: line,
+      }
+    }),
+    entityMap: {},
+  }
+}
+
+export const createEmptyContentState = (): ContentState => {
+  return {
+    blocks: [],
+    entityMap: {},
+  }
+}
+
 const getBlockType = (type?: string) => {
   if (type === 'unordered-list-item') {
     return ROW_TYPES.BULLETS
