@@ -1,9 +1,10 @@
 import {
-  contentState,
   EVENTS,
   getEmitter,
   TextEditor,
   TextToolbar,
+  ContentState,
+  createContentStateFromText,
 } from '@apprush/react-native-editor'
 import { Body, Button, Container, Icon, Title } from 'native-base'
 import React, { useState } from 'react'
@@ -17,6 +18,9 @@ const eventEmitter = getEmitter()
 const App = () => {
   const editor = useRef<TextEditor | null>(null)
   const [extraData, setExtraData] = useState(Date.now())
+  const [contentState, setContentState] = useState(() =>
+    createContentStateFromText('Hello world! \nI am jerloo')
+  )
   const logState = () => {
     eventEmitter.emit(EVENTS.LOG_STATE)
   }
@@ -49,7 +53,7 @@ const App = () => {
     eventEmitter.emit(EVENTS.CONVERT_TO_RAW)
   }
 
-  const onChange = (data: any) => {
+  const onChange = (data: ContentState) => {
     console.log(data)
     setExtraData(Date.now())
   }

@@ -6,7 +6,7 @@ import { ContentBlock, ContentRow, ContentState, Selection } from './models'
 
 export const generateId = () => shortid()
 
-export const contentState: ContentState = {
+export const demoContentState: ContentState = {
   blocks: [
     {
       key: '1la1e',
