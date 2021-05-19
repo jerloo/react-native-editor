@@ -175,6 +175,7 @@ class StyledInput extends React.Component<Props, State> {
         returnKeyType='default'
         multiline={!false}
         scrollEnabled={false}
+        editable={this.props.editable}
       >
         {blocks.map((block, i) => (
           <StyledText
