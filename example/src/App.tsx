@@ -90,6 +90,7 @@ const App = () => {
                 data={contentState}
                 onChange={onChange}
                 extraData={extraData}
+                editable={false}
               />
             </View>
             <TextToolbar />

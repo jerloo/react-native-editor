@@ -1414,7 +1414,7 @@ class Editor extends React.Component<Props, State> {
             style={styles.checkbox}
             isChecked={row.isCompleted}
             toggle={this.toggleTodo({ row, index })}
-            editable={this.props.editable || true}
+            editable={!!this.props.editable}
           />
         )}
         <StyledTextInput
@@ -1434,7 +1434,7 @@ class Editor extends React.Component<Props, State> {
           row={row}
           index={index}
           value={row.value || ''}
-          editable={this.props.editable || true}
+          editable={!!this.props.editable}
         />
       </View>
     )
@@ -1532,7 +1532,7 @@ class Editor extends React.Component<Props, State> {
           returnKeyType='default'
           multiline={false}
           placeholder='Empty'
-          editable={this.props.editable || true}
+          editable={!!this.props.editable}
         />
       </View>
     )
