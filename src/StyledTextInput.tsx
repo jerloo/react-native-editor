@@ -18,6 +18,7 @@ interface Props {
   inputStyles: ViewStyle
   alignStyles: ViewStyle
   underlineColorAndroid: string
+  editable?: boolean
 }
 
 interface State {

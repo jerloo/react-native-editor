@@ -64,6 +64,7 @@ interface Props {
   onChange?: (e: any) => void
   extraData: number
   imageHandler?: (image: string) => Promise<string>
+  editable?: boolean
 }
 
 interface State {
@@ -1410,6 +1411,7 @@ class Editor extends React.Component<Props, State> {
             style={styles.checkbox}
             isChecked={row.isCompleted}
             toggle={this.toggleTodo({ row, index })}
+            editable={this.props.editable || true}
           />
         )}
         <StyledTextInput
@@ -1429,6 +1431,7 @@ class Editor extends React.Component<Props, State> {
           row={row}
           index={index}
           value={row.value || ''}
+          editable={this.props.editable || true}
         />
       </View>
     )
@@ -1453,7 +1456,9 @@ class Editor extends React.Component<Props, State> {
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.imageRow}
-          onLongPress={this.handleImage({ row, index })}
+          onLongPress={
+            this.props.editable ? this.handleImage({ row, index }) : () => {}
+          }
         >
           <Lightbox>
             <Image
@@ -1524,6 +1529,7 @@ class Editor extends React.Component<Props, State> {
           returnKeyType='default'
           multiline={false}
           placeholder='Empty'
+          editable={this.props.editable || true}
         />
       </View>
     )

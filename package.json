@@ -1,6 +1,6 @@
 {
   "name": "@apprush/react-native-editor",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "A editor component for react native",
   "homepage": "https://github.com/jerloo/react-native-editor#readme",
   "main": "lib/index.js",
