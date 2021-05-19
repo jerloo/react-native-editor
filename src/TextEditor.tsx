@@ -62,9 +62,12 @@ interface Props {
   data: ContentState
   onFocus?: (e: any) => void
   onChange?: (e: any) => void
-  extraData: number
+  extraData: any
   imageHandler?: (image: string) => Promise<string>
   editable?: boolean
+  headerVisible?: boolean
+  footerVisible?: boolean
+  emptyVisible?: boolean
 }
 
 interface State {
@@ -1566,9 +1569,15 @@ class Editor extends React.Component<Props, State> {
         keyboardDismissMode='on-drag'
         contentContainerStyle={styles.contentContainerStyle}
         renderItem={this.renderItem}
-        ListFooterComponent={this.renderFooter}
-        ListEmptyComponent={this.renderEmpty}
-        ListHeaderComponent={this.renderHeader}
+        ListFooterComponent={
+          this.props.footerVisible ? this.renderFooter : undefined
+        }
+        ListEmptyComponent={
+          this.props.emptyVisible ? this.renderEmpty : undefined
+        }
+        ListHeaderComponent={
+          this.props.headerVisible ? this.renderHeader : undefined
+        }
         style={styles.flatList}
       />
     )
