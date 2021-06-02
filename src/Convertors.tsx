@@ -2,11 +2,17 @@ import _ from 'lodash'
 
 import { ROW_TYPES, STYLE_TYPES } from './Constants'
 import { generateId, parseRawBlock } from './Helpers'
+import {
+  ContentBlock,
+  ContentInlineStyle,
+  ContentRow,
+  ContentState,
+} from './models'
 
-export const convertToMarkdown = ({ rows = [] }: any) => {
+export const convertToMarkdown = ({ rows = [] }: { rows: ContentRow[] }) => {
   let markdown = ''
 
-  rows.forEach((row: any) => {
+  rows.forEach((row) => {
     const { blocks = [], type } = row
 
     if (!row.value) {
@@ -81,12 +87,16 @@ export const convertToMarkdown = ({ rows = [] }: any) => {
   return markdown
 }
 
-export const convertFromRaw = ({ contentState }: any) => {
+export const convertFromRaw = ({
+  contentState,
+}: {
+  contentState: ContentState
+}) => {
   const { blocks = [] } = contentState
 
-  const result: any[] = []
+  const result: ContentRow[] = []
 
-  blocks.forEach((block: any) => {
+  blocks.forEach((block) => {
     const { row, text, type } = parseRawBlock(block)
     result.push({ id: generateId(), type, value: text, blocks: row })
   })
@@ -96,8 +106,8 @@ export const convertFromRaw = ({ contentState }: any) => {
   return result
 }
 
-export const convertToRaw = ({ rows = [] }: any) => {
-  const result = { blocks: [], entityMap: {} } as any
+export const convertToRaw = ({ rows = [] }: { rows: ContentRow[] }) => {
+  const result: ContentState = { blocks: [], entityMap: {} }
 
   const sample = {
     key: '1la1e',
@@ -109,17 +119,19 @@ export const convertToRaw = ({ rows = [] }: any) => {
     data: {},
   }
 
-  rows.forEach((row: any) => {
+  rows.forEach((row) => {
     // console.log(item)
     // const { row, text, type } = parseRow(item)
     // result.push({ id: generateId(), type, value: text, blocks: row })
 
-    const item = {
+    const item: ContentBlock = {
       ...sample,
       key: generateId(),
       text: row.value,
       inlineStyleRanges: [],
-    } as any
+      styles: [],
+      blocks: [],
+    }
 
     let type = 'unstyled'
 
@@ -135,21 +147,21 @@ export const convertToRaw = ({ rows = [] }: any) => {
 
     let rangeIndex = 0
 
-    ;(row.blocks || []).forEach((block: any) => {
+    ;(row.blocks || []).forEach((block) => {
       const offset = rangeIndex
-      rangeIndex += block.text.length
+      rangeIndex += block.text?.length || 0
 
       const blockStyles = block.styles || []
 
       for (let i = 0; i < blockStyles.length; i++) {
         const style = blockStyles[i]
 
-        const inlineStyleRange = {
+        const inlineStyleRange: ContentInlineStyle = {
           offset: offset,
-          length: block.text.length,
+          length: block.text?.length || 0,
           style: style.toUpperCase(),
         }
-        item.inlineStyleRanges.push(inlineStyleRange)
+        item.inlineStyleRanges?.push(inlineStyleRange)
       }
       //
     })

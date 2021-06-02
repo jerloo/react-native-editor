@@ -6,15 +6,16 @@ import {
   FlatList,
   Image,
   Keyboard,
+  ListRenderItemInfo,
   Modal,
   SafeAreaView,
   Text,
   TextInput,
+  TextStyle,
   TouchableOpacity,
   View,
 } from 'react-native'
 import * as ImagePicker from 'react-native-image-picker'
-console.log('ImagePicker', ImagePicker)
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view'
 import Lightbox from 'react-native-lightbox'
 import { check, PERMISSIONS } from 'react-native-permissions'
@@ -33,6 +34,16 @@ import {
   removeSelectedText,
   splitRow,
 } from './Helpers'
+import {
+  AlignType,
+  ContentBlock,
+  ContentRow,
+  ContentState,
+  InsertRowEvent,
+  RenderItemInputData,
+  Selection,
+  SelectionChangeEvent,
+} from './models'
 // import Sketch from './Sketch'
 import StyledTextInput from './StyledTextInput'
 import styles from './Styles'
@@ -42,25 +53,31 @@ const eventEmitter = getEmitter()
 
 const listeners = {} as any
 
-const isListRow = (type: string) =>
+const isListRow = (type?: string) =>
   type === ROW_TYPES.BULLETS ||
   type === ROW_TYPES.NUMBERS ||
   type === ROW_TYPES.TODOS
 
 interface Props {
-  data: { blocks: []; entityMap: {} }
-  onFocus: (e: any) => void
-  onChange: (e: any) => void
+  data: ContentState
+  onFocus?: (e: any) => void
+  onChange?: (e: any) => void
+  extraData: any
+  imageHandler?: (image: string) => Promise<string>
+  editable?: boolean
+  headerVisible?: boolean
+  footerVisible?: boolean
+  emptyVisible?: boolean
 }
 
 interface State {
   isReady: boolean
   isFullscreen: boolean
   isSketchVisible: boolean
-  rows: any[]
+  rows: ContentRow[]
   extraData: any
   activeRowIndex: number
-  selection: { start: number; end: number; id: any }
+  selection: Selection
   activeStyles: string[]
 }
 
@@ -239,7 +256,7 @@ class Editor extends React.Component<Props, State> {
       newActiveStyles = [...activeStyles, style]
     }
 
-    let newState = { activeStyles: newActiveStyles, rows } as any
+    let newState = { activeStyles: newActiveStyles, rows } as State
 
     let throwOnChange = false
 
@@ -299,7 +316,11 @@ class Editor extends React.Component<Props, State> {
       newActiveStyles = [...newActiveStyles, style]
     }
 
-    let newState = { activeStyles: newActiveStyles, rows: [] } as any
+    let newState: State = {
+      ...this.state,
+      activeStyles: newActiveStyles,
+      rows: [],
+    }
 
     let throwOnChange = true
 
@@ -336,7 +357,7 @@ class Editor extends React.Component<Props, State> {
 
     const activeRow = Object.assign({}, rows[activeRowIndex])
 
-    let newState = { activeStyles: [], rows: [] } as any
+    let newState: State = { ...this.state, activeStyles: [], rows: [] }
     const fills = COLORS.map((color) => `fill-${color}`)
     const colors = COLORS.map((color) => `color-${color}`)
     let oldStyles = [...Object.values(STYLE_TYPES), ...fills, ...colors]
@@ -375,7 +396,7 @@ class Editor extends React.Component<Props, State> {
   }
 
   // TODO: review
-  alignRow = ({ type }: any) => {
+  alignRow = ({ type }: { type: AlignType }) => {
     const { activeRowIndex, rows } = this.state
 
     // const activeRow = Object.assign({}, rows[activeRowIndex])
@@ -421,7 +442,7 @@ class Editor extends React.Component<Props, State> {
       cancel: 'Cancel',
     }
     var CANCEL_INDEX = Object.values(BUTTONS).length - 1
-    var DESTRUCTIVE_INDEX = Object.keys(BUTTONS).indexOf(activeRow.type)
+    var DESTRUCTIVE_INDEX = Object.keys(BUTTONS).indexOf(activeRow.type || '')
 
     ActionSheet.showActionSheetWithOptions(
       {
@@ -584,17 +605,25 @@ class Editor extends React.Component<Props, State> {
       return
     }
 
+    const handler =
+      this.props.imageHandler ||
+      (async (image) => {
+        return image
+      })
+
     if (type === 'Take Photo') {
       ImagePicker.launchCamera({ mediaType: 'photo' }, (result) => {
         console.log(result)
 
         if (!result.didCancel) {
-          let newRowData = {
-            id: generateId(),
-            type: ROW_TYPES.IMAGE,
-            image: result.uri,
-          }
-          this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          handler(result.uri!).then((handledUri) => {
+            let newRowData = {
+              id: generateId(),
+              type: ROW_TYPES.IMAGE,
+              image: handledUri,
+            }
+            this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          })
         }
       })
     } else {
@@ -602,12 +631,14 @@ class Editor extends React.Component<Props, State> {
         console.log(result)
 
         if (!result.didCancel) {
-          let newRowData = {
-            id: generateId(),
-            type: ROW_TYPES.IMAGE,
-            image: result.uri,
-          }
-          this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          handler(result.uri!).then((handledUri) => {
+            let newRowData = {
+              id: generateId(),
+              type: ROW_TYPES.IMAGE,
+              image: handledUri,
+            }
+            this.insertRow({ newRowData, insertAfterActive: true, focus: true })
+          })
         }
       })
     }
@@ -629,7 +660,13 @@ class Editor extends React.Component<Props, State> {
 
   // TODO: Done
   emitActiveStyles = (
-    { activeStyles, updateState = false }: any = { activeStyles: [] },
+    {
+      activeStyles,
+      updateState = false,
+    }: {
+      activeStyles: string[]
+      updateState: boolean
+    } = { activeStyles: [], updateState: false },
     callback = () => {}
   ) => {
     let newActiveStyles = activeStyles || this.state.activeStyles
@@ -691,7 +728,7 @@ class Editor extends React.Component<Props, State> {
   }
 
   // TODO: done
-  changeRowIndent = ({ direction }: any) => {
+  changeRowIndent = ({ direction }: { direction: string }) => {
     const { activeRowIndex, rows = [] } = this.state
     if (activeRowIndex === null) {
       return
@@ -705,7 +742,9 @@ class Editor extends React.Component<Props, State> {
 
     if (direction === 'increase') {
       currentRow.value = `${indent}${text}`
-      currentRow.blocks.unshift({ text: indent })
+      currentRow.blocks?.unshift({
+        text: indent,
+      })
       newRows[activeRowIndex] = currentRow
       this.setState({ rows: newRows, extraData: Date.now() })
     }
@@ -713,7 +752,7 @@ class Editor extends React.Component<Props, State> {
     if (direction === 'decrease') {
       if (text.startsWith(indent)) {
         currentRow.value = text.slice(indent.length - 1, text.length)
-        currentRow.blocks.shift()
+        currentRow.blocks?.shift()
         newRows[activeRowIndex] = currentRow
         this.setState({ rows: newRows, extraData: Date.now() })
       }
@@ -812,7 +851,13 @@ class Editor extends React.Component<Props, State> {
   }
 
   // FIXME: check
-  handleBackspace = ({ row: item, index }: any) => {
+  handleBackspace = ({
+    row: item,
+    index,
+  }: {
+    row: ContentRow
+    index: number
+  }) => {
     const { selection, rows = [] } = this.state
     let row = Object.assign({}, item)
     const prevRow = Object.assign({}, rows[index - 1])
@@ -871,7 +916,7 @@ class Editor extends React.Component<Props, State> {
     if (keyValue === 'Backspace') {
       this.handleBackspace({ row, index })
     } else if (keyValue === 'Enter') {
-      this.setState({ selection: { start: 1, end: 1, id: null } })
+      this.setState({ selection: { start: 1, end: 1 } })
     } else if (keyValue === 'Tab') {
       // TODO: indent
     } else {
@@ -960,7 +1005,9 @@ class Editor extends React.Component<Props, State> {
     this.emitOnChange()
   }
   // FIXME: re-write
-  onSelectionChange = ({ row, index, value }: any) => (event: any) => {
+  onSelectionChange = ({ row, index, value }: SelectionChangeEvent) => (
+    event: any
+  ) => {
     const { selection } = event.nativeEvent
     const { rows = [], activeRowIndex, selection: oldSelection } = this.state
     const activeRow = Object.assign({}, rows[activeRowIndex])
@@ -988,19 +1035,21 @@ class Editor extends React.Component<Props, State> {
           activeRowIndex !== null
         ) {
           const {
-            block: { styles: blockStyles = [] } = {} as any,
+            block: { styles: blockStyles = [] } = {},
             position,
           } = getCurrentBlockInRow({ selection: newSelection, row })
           let activeStyles = blockStyles
 
           if (position === 'end') {
-            const lastBlockIndex = row.blocks.length - 1
-            const lastBlock = row.blocks[lastBlockIndex] || { styles: [] }
+            const lastBlockIndex = row.blocks?.length || 0 - 1
+            const lastBlock = row.blocks![lastBlockIndex] || { styles: [] }
             // console.tron.display({
             //   name: 'lastBlock',
             //   value: { props: lastBlock, row },
             // })
-            activeStyles = blockStyles.concat(lastBlock.styles || [])
+            activeStyles = blockStyles.concat(
+              (lastBlock as ContentBlock).styles || []
+            )
             activeStyles = _.uniq(activeStyles)
           }
 
@@ -1015,7 +1064,7 @@ class Editor extends React.Component<Props, State> {
           const blockStyles = []
 
           for (let i = startBlock.blockIndex!; i <= endBlock.blockIndex!; i++) {
-            const block = blocks[i] || {}
+            const block = blocks![i] || {}
             const { styles = [], text = '' } = block
             if (text && text !== ' ') {
               blockStyles.push(styles)
@@ -1081,7 +1130,7 @@ class Editor extends React.Component<Props, State> {
         newStyles = []
         console.log(newStyles)
       }
-      let newState = {} as any // { activeStyles: newStyles }
+      let newState = {} as State // { activeStyles: newStyles }
       if (activeRowIndex !== index) {
         newState.activeRowIndex = index
       }
@@ -1107,7 +1156,7 @@ class Editor extends React.Component<Props, State> {
       insertBeforeActive = false,
       insertAtLast = false,
       updateActiveIndex = false,
-    }: any = {},
+    }: InsertRowEvent,
     callback = (_e: any) => {}
   ) {
     const { rows = [], activeRowIndex } = this.state
@@ -1222,7 +1271,11 @@ class Editor extends React.Component<Props, State> {
       row.type = type
       // If its heading row, remove styles
       if (type.includes('heading')) {
-        row.blocks = row.blocks.map((item: any) => ({ text: item.text }))
+        row.blocks = row.blocks?.map((item) => ({
+          ...item,
+          styles: [],
+          inlineStyleRanges: [],
+        }))
       }
       const newRows = [...rows]
       newRows[index] = row
@@ -1235,6 +1288,7 @@ class Editor extends React.Component<Props, State> {
   }
   // FIXME:
   handleImage = ({ _row, index }: any) => () => {
+    console.log('handleImage')
     // const { activeRowIndex, rows = [] } = this.state
     ActionSheet.showActionSheetWithOptions(
       {
@@ -1252,7 +1306,7 @@ class Editor extends React.Component<Props, State> {
     )
   }
   // FIXME:
-  toggleTodo = ({ row, index }: any) => () => {
+  toggleTodo = ({ row, index }: { row: ContentRow; index: number }) => () => {
     const { rows = [] } = this.state
     const isCompleted = !row.isCompleted
     const newRows = [...rows]
@@ -1298,7 +1352,7 @@ class Editor extends React.Component<Props, State> {
   }
 
   // TODO: half
-  getInputStyles = ({ row }: any) => {
+  getInputStyles = ({ row }: RenderItemInputData) => {
     if (row.type === ROW_TYPES.HEADING1) {
       return styles.heading1
     }
@@ -1315,7 +1369,7 @@ class Editor extends React.Component<Props, State> {
   }
 
   // TODO: half
-  getNumberOrder = ({ _row, index }: any) => {
+  getNumberOrder = ({ index }: RenderItemInputData) => {
     const { rows } = this.state
     let numberOrder = 0
     for (let i = index; i >= 0; i--) {
@@ -1329,17 +1383,17 @@ class Editor extends React.Component<Props, State> {
   }
 
   // TODO: half
-  getAlignStyles = ({ row }: any) => {
-    let styles = {} as any
+  getAlignStyles = ({ row }: RenderItemInputData) => {
+    let s = {} as TextStyle
 
     if (row.align) {
-      styles.textAlign = row.align
+      s.textAlign = row.align
     }
 
-    return styles
+    return s
   }
 
-  renderInput = ({ row, index }: any) => {
+  renderInput = ({ row, index }: RenderItemInputData) => {
     const placeholder = this.getPlaceholder({ row, index })
     const inputStyles = this.getInputStyles({ row, index })
     const alignStyles = this.getAlignStyles({ row, index })
@@ -1360,6 +1414,7 @@ class Editor extends React.Component<Props, State> {
             style={styles.checkbox}
             isChecked={row.isCompleted}
             toggle={this.toggleTodo({ row, index })}
+            editable={!!this.props.editable}
           />
         )}
         <StyledTextInput
@@ -1378,14 +1433,15 @@ class Editor extends React.Component<Props, State> {
           alignStyles={alignStyles}
           row={row}
           index={index}
-          value={row.value}
+          value={row.value || ''}
+          editable={!!this.props.editable}
         />
       </View>
     )
   }
 
   // FIXME: needs attention
-  renderItem = ({ item: row, index }: any) => {
+  renderItem = ({ item: row, index }: ListRenderItemInfo<ContentRow>) => {
     if (row.type === ROW_TYPES.HR) {
       return this.renderLineBreak({ row, index })
     }
@@ -1398,12 +1454,14 @@ class Editor extends React.Component<Props, State> {
   }
 
   // FIXME:
-  renderImage = ({ row, index }: any) => {
+  renderImage = ({ row, index }: RenderItemInputData) => {
     return (
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.imageRow}
-          onLongPress={this.handleImage({ row, index })}
+          onLongPress={
+            this.props.editable ? this.handleImage({ row, index }) : () => {}
+          }
         >
           <Lightbox>
             <Image
@@ -1418,7 +1476,8 @@ class Editor extends React.Component<Props, State> {
   }
 
   // FIXME:
-  renderLineBreak = ({ _row, _index }: any) => {
+  renderLineBreak = ({ row, index }: RenderItemInputData) => {
+    console.log('renderLineBreak', row, index)
     return (
       <View style={styles.row}>
         <View style={styles.hr} />
@@ -1473,6 +1532,7 @@ class Editor extends React.Component<Props, State> {
           returnKeyType='default'
           multiline={false}
           placeholder='Empty'
+          editable={!!this.props.editable}
         />
       </View>
     )
@@ -1501,17 +1561,23 @@ class Editor extends React.Component<Props, State> {
     }
 
     return (
-      <FlatList
+      <FlatList<ContentRow>
         data={rows}
-        keyExtractor={(i) => i.id}
+        keyExtractor={(i) => i.id!}
         extraData={extraData}
         keyboardShouldPersistTaps={'always'}
         keyboardDismissMode='on-drag'
         contentContainerStyle={styles.contentContainerStyle}
         renderItem={this.renderItem}
-        ListFooterComponent={this.renderFooter}
-        ListEmptyComponent={this.renderEmpty}
-        ListHeaderComponent={this.renderHeader}
+        ListFooterComponent={
+          this.props.footerVisible ? this.renderFooter : undefined
+        }
+        ListEmptyComponent={
+          this.props.emptyVisible ? this.renderEmpty : undefined
+        }
+        ListHeaderComponent={
+          this.props.headerVisible ? this.renderHeader : undefined
+        }
         style={styles.flatList}
       />
     )

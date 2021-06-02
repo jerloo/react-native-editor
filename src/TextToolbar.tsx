@@ -48,7 +48,7 @@ const Button: React.FC<{
       disabled={isDisabled}
       onPress={onPress}
     >
-      {hasIcon && <Icon name={icon as any} color='black' size={20} />}
+      {hasIcon && icon && <Icon name={icon} color='black' size={20} />}
       {hasName && <Text style={[textStyles]}>{name}</Text>}
       {arrow && <Icon name={'chevron-down'} color='#e3e3e3' size={16} />}
     </TouchableOpacity>
@@ -70,8 +70,61 @@ interface State {
   activeView: string
 }
 
-class Toolbar extends React.Component<{}, State> {
-  constructor(props: {}) {
+type Feature =
+  | 'add'
+  | 'turn into'
+  | 'image'
+  | 'format-bold'
+  | 'format-italic'
+  | 'format-underline'
+  | 'format-strikethrough-variant'
+  | 'format-align-center'
+  | 'format-color-fill'
+  | 'format-color-text'
+  | 'format-clear'
+  | 'code'
+  | 'duplicate'
+  | 'format-indent-increase'
+  | 'format-indent-decrease'
+  | 'format-vertical-align-top'
+  | 'format-vertical-align-bottom'
+  | 'undo'
+  | 'redo'
+  | 'delete'
+  | 'fullscreen'
+  | 'keyboard-close'
+
+export const FullFeatures: Feature[] = [
+  'add',
+  'turn into',
+  'image',
+  'format-bold',
+  'format-italic',
+  'format-underline',
+  'format-strikethrough-variant',
+  'format-align-center',
+  'format-color-fill',
+  'format-color-text',
+  'format-clear',
+  'code',
+  'duplicate',
+  'format-indent-increase',
+  'format-indent-decrease',
+  'format-vertical-align-top',
+  'format-vertical-align-bottom',
+  'undo',
+  'redo',
+  'delete',
+  'fullscreen',
+  'keyboard-close',
+]
+
+interface Props {
+  features?: Feature[]
+}
+
+class Toolbar extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props)
     this.state = {
       activeStyles: [],
@@ -102,11 +155,11 @@ class Toolbar extends React.Component<{}, State> {
     }
   }
 
-  activeStylesChanged = ({ activeStyles }: any) => {
+  activeStylesChanged = ({ activeStyles }: { activeStyles: string[] }) => {
     this.setState({ activeStyles })
   }
 
-  rowTypeChanged = ({ type }: any) => {
+  rowTypeChanged = ({ type }: { type: string }) => {
     this.setState({ activeRowType: type })
   }
 
@@ -242,6 +295,14 @@ class Toolbar extends React.Component<{}, State> {
     )
   }
 
+  renderIfFeature = (feature: Feature, ...children: React.ReactNode[]) => {
+    return (this.props.features || FullFeatures).find(
+      (it) => it === feature
+    ) ? (
+      <>{children}</>
+    ) : null
+  }
+
   renderDefault = () => {
     const { activeStyles, activeRowType } = this.state
 
@@ -269,116 +330,198 @@ class Toolbar extends React.Component<{}, State> {
           keyboardDismissMode='none'
           contentContainerStyle={styles.contentContainerStyle}
         >
-          <Button
-            icon='plus-circle-outline'
-            onPress={this.emit(EVENTS.SHOW_INSERT_BLOCK)}
-          />
-          <Divider />
+          {this.renderIfFeature(
+            'add',
+            <Button
+              icon='plus-circle-outline'
+              onPress={this.emit(EVENTS.SHOW_INSERT_BLOCK)}
+            />,
+            <Divider />
+          )}
 
-          <Button
-            name='Turn Into'
-            arrow
-            onPress={this.emit(EVENTS.CHANGE_BLOCK_TYPE)}
-          />
-          <Divider />
+          {this.renderIfFeature(
+            'turn into',
+            <Button
+              name='Turn Into'
+              arrow
+              onPress={this.emit(EVENTS.CHANGE_BLOCK_TYPE)}
+            />,
+            <Divider />
+          )}
 
-          <Button icon='image' onPress={this.emit(EVENTS.SHOW_UPLOAD_FILE)} />
-          <Divider />
+          {this.renderIfFeature(
+            'image',
+            <Button
+              icon='image'
+              onPress={this.emit(EVENTS.SHOW_UPLOAD_FILE)}
+            />,
+            <Divider />
+          )}
 
-          <Button
-            icon='format-bold'
-            isActive={isActiveBold}
-            isDisabled={isDisabledBold}
-            onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'bold' })}
-          />
-          <Button
-            icon='format-italic'
-            isActive={isActiveItalic}
-            isDisabled={isDisabledItalic}
-            onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'italic' })}
-          />
-          <Button
-            icon='format-underline'
-            isActive={isActiveUnderline}
-            isDisabled={isDisabledUnderline}
-            onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'underline' })}
-          />
-          <Button
-            icon='format-strikethrough-variant'
-            isActive={isActiveStrikeThrough}
-            isDisabled={isDisabledStrikeThrough}
-            onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'strikethrough' })}
-          />
-          <Divider />
+          {this.renderIfFeature(
+            'format-bold',
+            <Button
+              icon='format-bold'
+              isActive={isActiveBold}
+              isDisabled={isDisabledBold}
+              onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'bold' })}
+            />
+          )}
 
-          <Button icon='format-align-center' onPress={this.toggleFormatAlign} />
-          <Divider />
+          {this.renderIfFeature(
+            'format-italic',
+            <Button
+              icon='format-italic'
+              isActive={isActiveItalic}
+              isDisabled={isDisabledItalic}
+              onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'italic' })}
+            />
+          )}
 
-          <Button icon='format-color-fill' onPress={this.toggleFormatFill} />
-          <Button icon='format-color-text' onPress={this.toggleFormatColor} />
-          <Divider />
+          {this.renderIfFeature(
+            'format-underline',
+            <Button
+              icon='format-underline'
+              isActive={isActiveUnderline}
+              isDisabled={isDisabledUnderline}
+              onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'underline' })}
+            />
+          )}
 
-          <Button
-            icon='format-clear'
-            onPress={this.emit(EVENTS.CLEAR_STYLES)}
-          />
-          <Divider />
+          {this.renderIfFeature(
+            'format-strikethrough-variant',
+            <Button
+              icon='format-strikethrough-variant'
+              isActive={isActiveStrikeThrough}
+              isDisabled={isDisabledStrikeThrough}
+              onPress={this.emit(EVENTS.TOGGLE_STYLE, {
+                style: 'strikethrough',
+              })}
+            />
+          )}
 
-          <Button
-            icon='code-json'
-            name='Code'
-            isActive={isActiveCode}
-            isDisabled={isDisabledCode}
-            onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'code' })}
-          />
+          {this.renderIfFeature(
+            'format-align-center',
+            <Divider />,
+            <Button
+              icon='format-align-center'
+              onPress={this.toggleFormatAlign}
+            />,
+            <Divider />
+          )}
+
+          {this.renderIfFeature(
+            'format-color-fill',
+            <Button icon='format-color-fill' onPress={this.toggleFormatFill} />
+          )}
+
+          {this.renderIfFeature(
+            'format-color-text',
+            <Button icon='format-color-text' onPress={this.toggleFormatColor} />
+          )}
+
+          {this.renderIfFeature(
+            'format-clear',
+            <Divider />,
+            <Button
+              icon='format-clear'
+              onPress={this.emit(EVENTS.CLEAR_STYLES)}
+            />,
+            <Divider />
+          )}
+
+          {this.renderIfFeature(
+            'code',
+            <Button
+              icon='code-json'
+              name='Code'
+              isActive={isActiveCode}
+              isDisabled={isDisabledCode}
+              onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'code' })}
+            />
+          )}
+
           {/*
             <Button icon="link" name="Link" isActive={isActiveLink} isDisabled={isDisabledLink} onPress={this.emit(EVENTS.TOGGLE_STYLE, { style: 'link'})} />
           */}
-          <Divider />
-
-          <Button name='Duplicate' onPress={this.emit(EVENTS.DUPLICATE_ROW)} />
-          <Divider />
+          {this.renderIfFeature(
+            'duplicate',
+            <Divider />,
+            <Button
+              name='Duplicate'
+              onPress={this.emit(EVENTS.DUPLICATE_ROW)}
+            />,
+            <Divider />
+          )}
 
           {/*
            */}
-          <Button
-            icon='format-indent-increase'
-            onPress={this.emit(EVENTS.CHANGE_BLOCK_INDENT, {
-              direction: 'increase',
-            })}
-          />
-          <Button
-            icon='format-indent-decrease'
-            onPress={this.emit(EVENTS.CHANGE_BLOCK_INDENT, {
-              direction: 'decrease',
-            })}
-          />
+          {this.renderIfFeature(
+            'format-indent-increase',
+            <Button
+              icon='format-indent-increase'
+              onPress={this.emit(EVENTS.CHANGE_BLOCK_INDENT, {
+                direction: 'increase',
+              })}
+            />
+          )}
+
+          {this.renderIfFeature(
+            'format-indent-decrease',
+            <Button
+              icon='format-indent-decrease'
+              onPress={this.emit(EVENTS.CHANGE_BLOCK_INDENT, {
+                direction: 'decrease',
+              })}
+            />
+          )}
+
           <Divider />
 
-          <Button
-            icon='format-vertical-align-top'
-            onPress={this.emit(EVENTS.CHANGE_BLOCK_INDEX, { direction: 'up' })}
-          />
-          <Button
-            icon='format-vertical-align-bottom'
-            onPress={this.emit(EVENTS.CHANGE_BLOCK_INDEX, {
-              direction: 'down',
-            })}
-          />
+          {this.renderIfFeature(
+            'format-vertical-align-top',
+            <Button
+              icon='format-vertical-align-top'
+              onPress={this.emit(EVENTS.CHANGE_BLOCK_INDEX, {
+                direction: 'up',
+              })}
+            />
+          )}
+
+          {this.renderIfFeature(
+            'format-vertical-align-bottom',
+            <Button
+              icon='format-vertical-align-bottom'
+              onPress={this.emit(EVENTS.CHANGE_BLOCK_INDEX, {
+                direction: 'down',
+              })}
+            />
+          )}
+
           <Divider />
 
-          <Button
-            icon='undo'
-            onPress={this.emit(EVENTS.BROWSE_HISTORY, { undo: true })}
-          />
-          <Button
-            icon='redo'
-            onPress={this.emit(EVENTS.BROWSE_HISTORY, { redo: true })}
-          />
-          <Divider />
+          {this.renderIfFeature(
+            'undo',
+            <Button
+              icon='undo'
+              onPress={this.emit(EVENTS.BROWSE_HISTORY, { undo: true })}
+            />
+          )}
 
-          <Button icon='delete' onPress={this.emit(EVENTS.DELETE_BLOCK)} />
-          <Divider />
+          {this.renderIfFeature(
+            'redo',
+            <Button
+              icon='redo'
+              onPress={this.emit(EVENTS.BROWSE_HISTORY, { redo: true })}
+            />
+          )}
+
+          {this.renderIfFeature(
+            'delete',
+            <Divider />,
+            <Button icon='delete' onPress={this.emit(EVENTS.DELETE_BLOCK)} />,
+            <Divider />
+          )}
 
           {/*
             <Button name="H1" />
@@ -397,15 +540,22 @@ class Toolbar extends React.Component<{}, State> {
           */}
         </ScrollView>
         <Divider />
-        <Button
-          icon='fullscreen'
-          onPress={this.emit(EVENTS.TOGGLE_FULL_SCREEN)}
-        />
+        {this.renderIfFeature(
+          'fullscreen',
+          <Button
+            icon='fullscreen'
+            onPress={this.emit(EVENTS.TOGGLE_FULL_SCREEN)}
+          />
+        )}
+
         <Divider />
-        <Button
-          icon='keyboard-close'
-          onPress={this.emit(EVENTS.HIDE_KEYBOARD)}
-        />
+        {this.renderIfFeature(
+          'keyboard-close',
+          <Button
+            icon='keyboard-close'
+            onPress={this.emit(EVENTS.HIDE_KEYBOARD)}
+          />
+        )}
       </React.Fragment>
     )
   }

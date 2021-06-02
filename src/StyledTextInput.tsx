@@ -1,18 +1,12 @@
 import * as React from 'react'
 import { TextInput, View, ViewStyle } from 'react-native'
 
+import { ContentRow, Selection } from './models'
 import StyledText from './StyledText'
 
 interface Props {
   value: string
-  row: {
-    text: string
-    value: string
-    blocks: any[]
-    type: string
-    isCompleted: boolean
-    id: string
-  }
+  row: ContentRow
   index: number
   handleKeyPress: (args: any) => (e: any) => void
   onChangeText: (args: any) => (e: any) => void
@@ -24,6 +18,7 @@ interface Props {
   inputStyles: ViewStyle
   alignStyles: ViewStyle
   underlineColorAndroid: string
+  editable?: boolean
 }
 
 interface State {
@@ -79,7 +74,7 @@ class StyledInput extends React.Component<Props, State> {
     }
   }
 
-  setSelection = ({ start, end }: any) => {
+  setSelection = ({ start, end }: Selection) => {
     // const { row, index, onSelectionChange } = this.props
 
     this.input.setNativeProps({ selection: { start, end } })
@@ -180,6 +175,7 @@ class StyledInput extends React.Component<Props, State> {
         returnKeyType='default'
         multiline={!false}
         scrollEnabled={false}
+        editable={this.props.editable}
       >
         {blocks.map((block, i) => (
           <StyledText

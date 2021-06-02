@@ -2,31 +2,11 @@ import _ from 'lodash'
 import shortid from 'shortid'
 
 import { ROW_TYPES, STYLE_TYPES } from './Constants'
+import { ContentBlock, ContentRow, ContentState, Selection } from './models'
 
 export const generateId = () => shortid()
 
-export interface ContentInlineStyle {
-  offset: number
-  length: number
-  style: string
-}
-
-export interface ContentBlock {
-  key: string
-  text: string
-  type: string
-  depth: number
-  inlineStyleRanges: ContentInlineStyle[]
-  entityRanges: any[]
-  data: any
-}
-
-export interface ContentState {
-  blocks: ContentBlock[]
-  entityMap: any
-}
-
-export const contentState: ContentState = {
+export const demoContentState: ContentState = {
   blocks: [
     {
       key: '1la1e',
@@ -36,6 +16,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 16, length: 4, style: 'BOLD' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '5bl2j',
@@ -45,6 +27,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 16, length: 6, style: 'ITALIC' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '9sen6',
@@ -54,6 +38,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 16, length: 9, style: 'UNDERLINE' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: 'a11h3',
@@ -67,6 +53,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '3g7tj',
@@ -79,6 +67,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: 'o4sp',
@@ -91,6 +81,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: 'dtmbt',
@@ -104,6 +96,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '596kp',
@@ -113,6 +107,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '8jtu1',
@@ -125,6 +121,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '86phc',
@@ -137,6 +135,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '69jv4',
@@ -149,6 +149,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: 'kpe8',
@@ -162,6 +164,8 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '292du',
@@ -171,6 +175,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '6g2mu',
@@ -180,6 +186,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 0, length: 5, style: 'UNDERLINE' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: 'a2fp3',
@@ -189,6 +197,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 0, length: 12, style: 'UNDERLINE' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '4u38f',
@@ -198,6 +208,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 0, length: 7, style: 'UNDERLINE' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '28gr5',
@@ -207,6 +219,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '2tjri',
@@ -216,6 +230,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 0, length: 5, style: 'UNDERLINE' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: '8oduf',
@@ -225,6 +241,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 0, length: 7, style: 'UNDERLINE' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: 'dtld2',
@@ -234,6 +252,8 @@ export const contentState: ContentState = {
       inlineStyleRanges: [{ offset: 0, length: 8, style: 'UNDERLINE' }],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
     {
       key: 'dhfar',
@@ -247,12 +267,36 @@ export const contentState: ContentState = {
       ],
       entityRanges: [],
       data: {},
+      styles: [],
+      blocks: [],
     },
   ],
   entityMap: {},
 }
 
-const getBlockType = (type: string) => {
+export const createContentStateFromText = (
+  text: string,
+  delimiter?: string
+): ContentState => {
+  const lines = text.split(delimiter || '\n')
+  return {
+    blocks: lines.map((line) => {
+      return {
+        text: line,
+      }
+    }),
+    entityMap: {},
+  }
+}
+
+export const createEmptyContentState = (): ContentState => {
+  return {
+    blocks: [],
+    entityMap: {},
+  }
+}
+
+const getBlockType = (type?: string) => {
   if (type === 'unordered-list-item') {
     return ROW_TYPES.BULLETS
   }
@@ -264,17 +308,17 @@ const getBlockType = (type: string) => {
   return ROW_TYPES.TEXT
 }
 
-export const parseRawBlock = (block: any) => {
+export const parseRawBlock = (block: ContentBlock) => {
   const { text, inlineStyleRanges, type } = block
 
   if (!text || !text.length) {
     return { row: [{ text: '' }], type: getBlockType(type), text: '' }
   }
-  const result = []
+  const result: ContentBlock[] = []
 
   let styleOffsets: any[] = []
 
-  inlineStyleRanges.forEach((inlineStyleRange: any) => {
+  inlineStyleRanges?.forEach((inlineStyleRange: any) => {
     styleOffsets.push(inlineStyleRange.offset)
     styleOffsets.push(inlineStyleRange.length + inlineStyleRange.offset)
   })
@@ -290,33 +334,30 @@ export const parseRawBlock = (block: any) => {
     const item = {
       text: text.substring(0, firstIndex),
     }
-    result.push(item)
+    result.push(item as ContentBlock)
   }
 
   styleOffsets.forEach((a, index) => {
     const b = styleOffsets[index + 1]
     if (b) {
-      const item: {
-        styles: string[]
-        text: string
-      } = {
+      const item: ContentBlock = {
         styles: [],
         text: '',
       }
 
-      inlineStyleRanges.forEach((inlineStyleRange: any) => {
+      inlineStyleRanges?.forEach((inlineStyleRange: any) => {
         const start = inlineStyleRange.offset
         const end = inlineStyleRange.length + inlineStyleRange.offset
 
         if (start >= a && b <= end) {
           item.text = text.substring(a, b)
           if (inlineStyleRange.style) {
-            item.styles.push(inlineStyleRange.style.toLowerCase())
+            item.styles?.push(inlineStyleRange.style.toLowerCase())
           }
         }
       })
 
-      result.push(item)
+      result.push(item as ContentBlock)
     }
   })
 
@@ -328,7 +369,7 @@ export const parseRawBlock = (block: any) => {
     result.push(item)
   }
 
-  if (!inlineStyleRanges.length) {
+  if (!inlineStyleRanges?.length) {
     const item = { row: [{ text: text }], type: getBlockType(type), text: text }
     result.push(item)
   }
@@ -345,16 +386,18 @@ export const getCurrentBlockInRow = ({
   selection,
   row,
   cursorAt = null,
-}: any) => {
-  if (cursorAt === null && selection.id !== row.id) {
+}: {
+  selection?: Selection
+  row: ContentRow
+  cursorAt?: number | null
+}) => {
+  if (cursorAt === null && selection?.id !== row.id) {
     return {}
   }
 
-  let rowCursorAt = cursorAt !== null ? cursorAt : selection.start
+  let rowCursorAt = cursorAt !== null ? cursorAt : selection?.start
 
-  let currentBlock: {
-    text: string
-  } = {
+  let currentBlock: ContentBlock = {
     text: '',
   }
   let blockIndex: number = -1
@@ -408,10 +451,22 @@ export const getCurrentBlockInRow = ({
     // console.log("Cursor is At middle text::", pointerAt)
   }
 
-  return { block: currentBlock, blockIndex, pointerAt, position, styles: [] }
+  return {
+    block: currentBlock,
+    blockIndex,
+    pointerAt,
+    position,
+    styles: [],
+  }
 }
 
-export const getSelectedBlocks = ({ selection, row }: any) => {
+export const getSelectedBlocks = ({
+  selection,
+  row,
+}: {
+  selection: Selection
+  row: ContentRow
+}) => {
   const { start = 0, end = 0 } = selection
   const startBlock = getCurrentBlockInRow({ row, cursorAt: start })
   const endBlock = getCurrentBlockInRow({ row, cursorAt: end })
@@ -597,7 +652,13 @@ export const attachStylesToSelectedText = ({
   return { blocks: data }
 }
 
-export const removeSelectedText = ({ selection, row }: any) => {
+export const removeSelectedText = ({
+  selection,
+  row,
+}: {
+  selection: Selection
+  row: ContentRow
+}) => {
   const { blocks = [], value = '' } = row
 
   if (selection.end - selection.start === value.length) {
@@ -605,14 +666,14 @@ export const removeSelectedText = ({ selection, row }: any) => {
   }
 
   const { startBlock, endBlock } = getSelectedBlocks({ selection, row })
-  if (startBlock === null || endBlock === null) return
+  if (startBlock === null || endBlock === null) return []
 
   // console.tron.display({
   //   name: 'removeSelectedText',
   //   value: { startBlock, endBlock },
   // })
 
-  const newBlocks = []
+  const newBlocks: ContentBlock[] = []
 
   let p1 = blocks.slice(0, startBlock.blockIndex)
   let p2 = blocks.slice(endBlock.blockIndex! + 1)
@@ -621,7 +682,7 @@ export const removeSelectedText = ({ selection, row }: any) => {
     if (i >= startBlock.blockIndex! && i <= endBlock.blockIndex!) {
       const block = blocks[i]
 
-      const { text, styles: currentStyles = [] } = block
+      const { text = '', styles: currentStyles = [] } = block
       // let blockText = text
       let textParts: string[]
       if (startBlock.blockIndex === endBlock.blockIndex) {
@@ -629,18 +690,48 @@ export const removeSelectedText = ({ selection, row }: any) => {
         if (startBlock.pointerAt === text.length) {
           blockPrevText = text.slice(0, -1)
         }
-        const prevBlock = { text: blockPrevText, styles: currentStyles }
+        const prevBlock: ContentBlock = {
+          text: blockPrevText,
+          styles: currentStyles,
+          key: '',
+          type: '',
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: null,
+          blocks: [],
+        }
         newBlocks.push(prevBlock)
       } else if (i === startBlock.blockIndex) {
         textParts = splitString(text, startBlock.pointerAt)
         const { styles: currentStyles = [] } = block
-        const prevBlock = { text: textParts[0], styles: currentStyles }
+        const prevBlock: ContentBlock = {
+          text: textParts[0],
+          styles: currentStyles,
+          key: '',
+          type: '',
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: null,
+          blocks: [],
+        }
         newBlocks.push(prevBlock)
       } else if (i === endBlock.blockIndex) {
         // blockText = text.substring(0, endBlock.pointerAt)
         textParts = splitString(text, endBlock.pointerAt)
         const { styles: currentStyles = [] } = block
-        const nextBlock = { text: textParts[1], styles: currentStyles }
+        const nextBlock: ContentBlock = {
+          text: textParts[1],
+          styles: currentStyles,
+          key: '',
+          type: '',
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: null,
+          blocks: [],
+        }
         newBlocks.push(nextBlock)
       } else {
         //   blockText = text

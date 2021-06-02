@@ -9,7 +9,9 @@
 ![David](https://img.shields.io/david/@apprush/react-native-editor) -->
 <!-- [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/jeremaihloo) -->
 
-A responsive solution for iphone6 ui design.
+A rich text editor for react native. Supports Draft.js and Markdown.
+
+Copied source code from https://github.com/vobi-io/markdown-editor
 
 <img src="./screenshots/main.jpeg" alt="drawing" width="200"/>
 
@@ -41,3 +43,25 @@ yarn add @apprush/react-native-editor
     </Container>
 </SafeAreaView>
 ```
+
+### To Do
+
+- [x] Convert from Draft.js contentState
+- [x] Convert to Draft.js contentState
+- [ ] Convert from Markdown
+- [x] Convert to Markdown
+- [x] Bold
+- [x] Italic
+- [x] Underline
+- [x] Strikethrough
+- [x] Move line up & down
+- [x] Bullets (Unordered List)
+- [x] Numbered List (Ordered List)
+- [x] Blockquote
+- [x] Heading 1
+- [x] Heading 2
+- [x] Heading 3
+- [ ] Font colors
+- [ ] Tables
+- [ ] Insert images
+- [ ] Intends
