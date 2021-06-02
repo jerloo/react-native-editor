@@ -54,7 +54,7 @@ const App = () => {
   }
 
   const onChange = (data: ContentState) => {
-    console.log(data)
+    console.log('onChange', data)
     setExtraData(Date.now())
   }
   return (
